@@ -1,5 +1,6 @@
 package com.example.messageappcompose
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -44,7 +45,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
+       Conversation(SampleData.conversationSample)
                 }
             }
         }
@@ -70,6 +71,7 @@ fun MessageCard(msg: Message) {
         val surfaceColor by animateColorAsState(
             if (isExpanded) MaterialTheme.colorScheme.primary
             else MaterialTheme.colorScheme.surface,
+            label = "",
         )
         Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
             Text(
@@ -88,7 +90,9 @@ fun MessageCard(msg: Message) {
             ) {
                 Text(
                     text = msg.body,
-                    style = MaterialTheme.typography.bodyMedium
+                    modifier = Modifier.padding(all=4.dp),
+                    maxLines = if (isExpanded)Int.MAX_VALUE else 1,
+                    style = MaterialTheme.typography.bodyMedium,
                 )
             }
         }
@@ -98,7 +102,7 @@ fun MessageCard(msg: Message) {
 @Preview(showSystemUi = true, name = "Light Mode")
 @Preview(
     showSystemUi = true,
-
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
     name = "Dark Mode"
 )
 @Composable
@@ -124,7 +128,9 @@ fun Conversation(messages: List<Message>) {
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "Dark Mode")
 @Composable
 fun ConversationPreview() {
     MessageAppComposeTheme {
